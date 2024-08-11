@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qlnhahang.DailyMenu.DailyMenu;
+import com.example.qlnhahang.DailyMenu.QLDailyMenu;
 import com.example.qlnhahang.Employees.QLNhanVien;
 import com.example.qlnhahang.MenuItems.QLMonAn;
 
@@ -28,7 +28,7 @@ public class Main extends AppCompatActivity {
         startActivity(monan);
     }
     public void menutheongay(View view){
-        Intent menutheongay = new Intent(Main.this, DailyMenu.class);
+        Intent menutheongay = new Intent(Main.this, QLDailyMenu.class);
         startActivity(menutheongay);
     }
 
