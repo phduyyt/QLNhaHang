@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import com.example.qlnhahang.Class.DailyMenu;
 import com.example.qlnhahang.Class.Employees;
 import com.example.qlnhahang.Class.MenuItems;
+import com.example.qlnhahang.Class.Tables;
 import com.example.qlnhahang.Class.User;
 
 import java.util.ArrayList;
@@ -414,6 +414,65 @@ public class MyDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<Tables> getAllTables() {
+        ArrayList<Tables> tablesList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        // Truy vấn tất cả dữ liệu từ bảng tables
+        String query = "SELECT * FROM " + TABLE_TABLES;
+        Cursor cursor = db.rawQuery(query, null);
 
+        if (cursor.moveToFirst()) {
+            do {
+                // Lấy dữ liệu từ cursor
+                int tableId = cursor.getInt(0);
+                int tableNumber = cursor.getInt(1);
+                int capacity = cursor.getInt(2);
+                String status = cursor.getString(3);
+
+                // Tạo đối tượng Tables và thêm vào danh sách
+                Tables table = new Tables(tableId, tableNumber, capacity, status);
+                tablesList.add(table);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return tablesList;
+    }
+
+    public int addTable(Tables table) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = -1;
+
+        // Check if the table number already exists
+        String checkQuery = "SELECT COUNT(*) FROM " + TABLE_TABLES + " WHERE " + TABLE_NUMBER + " = ?";
+        Cursor cursor = db.rawQuery(checkQuery, new String[]{String.valueOf(table.getTableNumber())});
+
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+
+            if (count > 0) {
+                // Table number already exists
+                db.close();
+                return -1; // Return -1 to indicate the table number already exists
+            }
+        }
+
+        // Insert the new table if it does not exist
+        ContentValues values = new ContentValues();
+        values.put(TABLE_NUMBER, table.getTableNumber());
+        values.put(CAPACITY, table.getCapacity());
+        values.put(STATUS, table.getStatus());
+
+        // Insert the new record and get the row ID
+        long rowId = db.insert(TABLE_TABLES, null, values);
+        db.close();
+
+        if (rowId != -1) {
+            result = (int) rowId; // Return the row ID if insertion was successful
+        }
+        return result;
+    }
 }

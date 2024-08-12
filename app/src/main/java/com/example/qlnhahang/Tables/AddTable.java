@@ -1,0 +1,61 @@
+package com.example.qlnhahang.Tables;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.qlnhahang.Class.Tables;
+import com.example.qlnhahang.MyDatabase;
+import com.example.qlnhahang.R;
+
+import java.util.ArrayList;
+
+public class AddTable extends AppCompatActivity {
+    MyDatabase myDatabase;
+    EditText etTableName, etTableCapacity;
+    Spinner spinnerTableStatus;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_add_table);
+        myDatabase = new MyDatabase(this);
+        etTableName = findViewById(R.id.etTableName);
+        etTableCapacity = findViewById(R.id.etTableCapacity);
+        spinnerTableStatus = findViewById(R.id.spinnerTableStatus);
+        ArrayList<String> table_status = new ArrayList<>();
+        table_status.add("Trống");
+        table_status.add("Đang sử dụng");
+        table_status.add("Đã đặt");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, table_status);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTableStatus.setAdapter(adapter);
+    }
+    public void thembanan(View view){
+        int tableName = Integer.parseInt((String.valueOf(etTableName.getText())));
+        int tableCapacity = Integer.parseInt((String.valueOf(etTableCapacity.getText())));
+        String tableStatus = spinnerTableStatus.getSelectedItem().toString();
+        Tables table = new Tables(tableName, tableCapacity, tableStatus);
+        int result = myDatabase.addTable(table);
+        if(result != -1){
+            Toast.makeText(this, "Thêm bàn ăn thành công", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AddTable.this, QLTable.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Thêm bàn ăn thất bại", Toast.LENGTH_SHORT).show();
+        }
+    }
+}

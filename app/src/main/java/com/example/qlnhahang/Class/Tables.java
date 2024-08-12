@@ -12,6 +12,11 @@ public class Tables {
         this.capacity = capacity;
         this.status = status;
     }
+    public Tables( int tableNumber, int capacity, String status) {
+        this.tableNumber = tableNumber;
+        this.capacity = capacity;
+        this.status = status;
+    }
 
     // Getters and Setters
     public int getTableId() {

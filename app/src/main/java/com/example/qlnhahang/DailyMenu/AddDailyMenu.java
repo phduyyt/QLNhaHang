@@ -48,15 +48,18 @@ public class AddDailyMenu extends AppCompatActivity {
 
     }
     private void showDatePicker() {
+        // Khởi tạo đối tượng Calendar
+        Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        // Tạo và hiển thị DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
                 (view, year1, month1, dayOfMonth) -> {
-                    // Định dạng ngày theo mong muốn
-                    String date = String.format("%d-%d-%d", dayOfMonth, month1 + 1, year1);
+                    // Định dạng ngày theo kiểu "dd-MM-yyyy"
+                    String date = String.format("%02d-%02d-%d", dayOfMonth, month1 + 1, year1);
                     etMenuDate.setText(date);
                 },
                 year, month, day
@@ -64,6 +67,7 @@ public class AddDailyMenu extends AppCompatActivity {
 
         datePickerDialog.show();
     }
+
     public void them(View view) {
         String date = etMenuDate.getText().toString();
         if (date.isEmpty()) {
