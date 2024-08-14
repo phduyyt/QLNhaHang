@@ -33,6 +33,11 @@ public class AddTable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_table);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         myDatabase = new MyDatabase(this);
         etTableName = findViewById(R.id.etTableName);
         etTableCapacity = findViewById(R.id.etTableCapacity);

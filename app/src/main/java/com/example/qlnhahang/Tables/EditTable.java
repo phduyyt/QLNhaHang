@@ -12,6 +12,9 @@ import android.widget.Spinner;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.qlnhahang.Adapter.BanAnMenuAdapter;
 import com.example.qlnhahang.Class.MenuItems;
@@ -40,7 +43,11 @@ public class EditTable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_table);
-
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         myDatabase = new MyDatabase(this);
         etTableName = findViewById(R.id.etTableName);
         etTableCapacity = findViewById(R.id.etTableCapacity);

@@ -32,6 +32,11 @@ public class QLTable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_qltable);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         myDatabase = new MyDatabase(this);
         list = myDatabase.getAllTables();
         adapter = new BanAnAdapter(this,R.layout.layout_table, list);

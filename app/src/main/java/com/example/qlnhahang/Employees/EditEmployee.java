@@ -25,6 +25,11 @@ public class EditEmployee extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_employee);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         editTextId = findViewById(R.id.editTextId);
         editTextName = findViewById(R.id.editTextName);
         editTextPhone = findViewById(R.id.editTextPhone);
