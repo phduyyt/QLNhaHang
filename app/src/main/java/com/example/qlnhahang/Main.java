@@ -36,5 +36,4 @@ public class Main extends AppCompatActivity {
         Intent ban = new Intent(Main.this, QLTable.class);
         startActivity(ban);
     }
-
 }

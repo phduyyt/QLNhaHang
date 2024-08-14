@@ -1,75 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_marginTop="60dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main">
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Quản lý nhân viên"
-        android:onClick="qlnhanvien"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHorizontal_bias="0.5"/>
+    tools:context=".Main"
+    android:orientation="vertical"
+    android:background="#E9D2D2">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Quản lý món ăn"
-        android:onClick="qlmonan"
-        app:layout_constraintTop_toBottomOf="@+id/button1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHorizontal_bias="0.5"/>
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="0dp"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Menu theo ngày"
-        android:onClick="menutheongay"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHorizontal_bias="0.5"/>
+        android:text="Quản lý nhà hàng"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:background="#6D37CC"
+        android:paddingVertical="15dp"
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="0dp"
+        />
+    <!-- First Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Quản lý bàn"
-        android:onClick="qlban"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHorizontal_bias="0.5"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp">
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="0dp"
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_height="86dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableTop="@drawable/ic_employee"
+            android:gravity="center"
+            android:onClick="qlnhanvien"
+            android:padding="12dp"
+            android:text="Quản lý nhân viên" />
+
+        <Button
+            android:id="@+id/button2"
+            android:onClick="qlmonan"
+            android:layout_width="0dp"
+            android:layout_height="86dp"
+            android:layout_weight="1"
+            android:text="Quản lý món ăn"
+            android:drawableTop="@drawable/ic_food"
+            android:background="@color/white"
+            android:padding="12dp"
+            android:layout_margin="4dp"/>
+    </LinearLayout>
+
+    <!-- Second Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Doanh thu"
-        android:onClick="doanhthu"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHorizontal_bias="0.5"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="86dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableTop="@drawable/baseline_restaurant_menu_24"
+            android:onClick="menutheongay"
+            android:padding="12dp"
+            android:text="Menu theo ngày" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="86dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableTop="@drawable/baseline_table_restaurant_24"
+            android:onClick="qlban"
+            android:padding="12dp"
+            android:text="Quản lý bàn" />
+    </LinearLayout>
+    <!-- Second Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="80dp">
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="322dp"
+            android:layout_height="86dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:drawableTop="@drawable/baseline_attach_money_24"
+            android:onClick="doanhthu"
+            android:padding="16dp"
+            android:text="Doanh thu" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
