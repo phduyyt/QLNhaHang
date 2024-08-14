@@ -90,8 +90,4 @@ public class AddTable extends AppCompatActivity {
             Toast.makeText(this, "Thêm bàn ăn thất bại", Toast.LENGTH_SHORT).show();
         }
     }
-    public void quaylai(View view){
-        Intent intent = new Intent(AddTable.this, QLTable.class);
-        startActivity(intent);
-    }
 }

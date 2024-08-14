@@ -43,16 +43,7 @@ public class QLMonAn extends AppCompatActivity {
         // Load menu items and set up adapter
         loadMenuItems();
 
-        listmonan.setOnItemClickListener((adapterView, view, i, l) -> {
-            MenuItems selectedItem = arrMenu.get(i);
-            Intent intent = new Intent(QLMonAn.this, EditMonAn.class);
-            intent.putExtra("id", String.valueOf(selectedItem.getMenuItemId()));
-            intent.putExtra("name", selectedItem.getName());
-            intent.putExtra("price", selectedItem.getPrice());
-            intent.putExtra("description", selectedItem.getDescription());
-            intent.putExtra("image", selectedItem.getImage());
-            startActivity(intent);
-        });
+
     }
 
     private void loadMenuItems() {
@@ -76,8 +67,7 @@ public class QLMonAn extends AppCompatActivity {
     }
 
     public void quaylai(View view) {
-        Intent quaylai = new Intent(QLMonAn.this, Main.class);
-        startActivity(quaylai);
+        finish();
     }
 
     @Override

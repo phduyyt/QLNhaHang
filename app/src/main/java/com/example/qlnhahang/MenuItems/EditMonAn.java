@@ -123,7 +123,10 @@ public class EditMonAn extends AppCompatActivity {
                 int menuid = Integer.parseInt(getIntent().getStringExtra("id"));
                 myDatabase.deleteMenuItem(menuid);
                 Intent intent = new Intent(EditMonAn.this, QLMonAn.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); //Tránh quay lại màn hình sửa
+
                 startActivity(intent);
+                finish();
             }
         });
         builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {

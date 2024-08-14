@@ -102,6 +102,7 @@ public class AddMOnAn extends AppCompatActivity {
         Toast.makeText(this, "Thêm món ăn thành công!", Toast.LENGTH_SHORT).show();
 
         Intent quaylai = new Intent(AddMOnAn.this, QLMonAn.class);
+        quaylai.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(quaylai);
     }
 }

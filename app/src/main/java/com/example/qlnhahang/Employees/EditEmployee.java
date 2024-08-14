@@ -57,8 +57,7 @@ public class EditEmployee extends AppCompatActivity {
         double salary = Double.parseDouble(editTextSalary.getText().toString());
         Employees e = new Employees(id,name,phone,position,salary);
         myDatabase.updateEmployee(e);
-        Intent intent = new Intent(EditEmployee.this, QLNhanVien.class);
-        startActivity(intent);
+        finish();
     }
     public void xoa(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -70,8 +69,13 @@ public class EditEmployee extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 int employeeId = Integer.parseInt(editTextId.getText().toString());
                 myDatabase.deleteEmployee(employeeId);
+                // Create an intent to navigate back to the employee list
                 Intent intent = new Intent(EditEmployee.this, QLNhanVien.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); //Tránh quay lại màn hình sửa
                 startActivity(intent);
+
+                // Finish the current activity
+                finish();
             }
         });
         builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {

@@ -95,6 +95,7 @@ public class AddDailyMenu extends AppCompatActivity {
         if (result != -1) {
             Toast.makeText(this, "Thêm thực đơn thành công", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(AddDailyMenu.this, QLDailyMenu.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             Toast.makeText(this, "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_SHORT).show();

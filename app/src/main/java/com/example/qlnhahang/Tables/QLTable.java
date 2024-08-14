@@ -61,7 +61,6 @@ public class QLTable extends AppCompatActivity {
         startActivity(thembanan);
     }
     public void quaylai(View view){
-        Intent quaylai = new Intent(QLTable.this, Main.class);
-        startActivity(quaylai);
+        finish();
     }
 }
