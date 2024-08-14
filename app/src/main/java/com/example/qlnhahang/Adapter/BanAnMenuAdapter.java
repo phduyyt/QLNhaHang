@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,9 +46,11 @@ public class BanAnMenuAdapter extends ArrayAdapter<MenuItems> {
         // Find the TextViews in the layout and set their values
         TextView tvMenuItemName = convertView.findViewById(R.id.tvTableMenuItemName);
         TextView tvMenuItemPrice = convertView.findViewById(R.id.tvTableMenuItemPrice);
+        EditText etMenuItemQuantity = convertView.findViewById(R.id.etQuantity);
         tvMenuItemName.setText(m.getName());
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         tvMenuItemPrice.setText(currencyFormat.format(m.getPrice()));
+        etMenuItemQuantity.setText("0");
         return convertView;
     }
 }
