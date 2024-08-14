@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.qlnhahang.Adapter.BanAnAdapter;
 import com.example.qlnhahang.Class.Tables;
+import com.example.qlnhahang.Main;
 import com.example.qlnhahang.MainActivity;
 import com.example.qlnhahang.MyDatabase;
 import com.example.qlnhahang.R;
@@ -45,6 +46,7 @@ public class QLTable extends AppCompatActivity {
                 intent.putExtra("number", String.valueOf(tb.getTableNumber()));
                 intent.putExtra("capacity", String.valueOf(tb.getCapacity()));
                 intent.putExtra("status", tb.getStatus());
+                intent.putExtra("date", tb.getTabledate());
                 startActivity(intent);
             }
         });
@@ -54,7 +56,7 @@ public class QLTable extends AppCompatActivity {
         startActivity(thembanan);
     }
     public void quaylai(View view){
-        Intent quaylai = new Intent(QLTable.this, MainActivity.class);
+        Intent quaylai = new Intent(QLTable.this, Main.class);
         startActivity(quaylai);
     }
 }

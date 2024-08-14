@@ -36,6 +36,7 @@ public class MyDatabase extends SQLiteOpenHelper {
     private static final String TABLE_NUMBER = "table_number";
     private static final String CAPACITY = "capacity";
     private static final String STATUS = "status";
+    private static final String TABLE_DATE = "table_date";
 
     private static final String TABLE_MENU_ITEMS = "menu_items";
     private static final String MENU_ITEM_ID = "menu_item_id";
@@ -60,6 +61,10 @@ public class MyDatabase extends SQLiteOpenHelper {
     private static final String TABLE_MENU_ITEM_QUANTITY = "quantity";
     private static final String TABLE_MENU_ITEM_ORDER_DATE = "order_date";
 
+    private static final String TABLE_REVENUE = "revenue";
+    private static final String REVENUE_DATE = "revenue_date";
+    private static final String REVENUE_AMOUNT = "revenue_amount";
+
     // Constructor
     public MyDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -76,7 +81,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL(createTableEmployees);
 
         // Tạo bảng bàn ăn
-        String createTableTables = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " + "%s INTEGER, %s INTEGER, %s TEXT)", TABLE_TABLES, TABLE_ID, TABLE_NUMBER, CAPACITY, STATUS);
+        String createTableTables = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " + "%s INTEGER, %s INTEGER, %s TEXT, %s TEXT)", TABLE_TABLES, TABLE_ID, TABLE_NUMBER, CAPACITY, STATUS, TABLE_DATE);
         db.execSQL(createTableTables);
 
         // Tạo bảng món ăn
@@ -94,6 +99,10 @@ public class MyDatabase extends SQLiteOpenHelper {
         // Tạo bảng liên kết bàn ăn với món ăn
         String createTableTableMenuItems = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " + "%s INTEGER, %s INTEGER, %s INTEGER, %s DATETIME, FOREIGN KEY (%s) REFERENCES %s(%s), FOREIGN KEY (%s) REFERENCES %s(%s))", TABLE_TABLE_MENU_ITEMS, TABLE_MENU_ITEM_ID, TABLE_MENU_ITEM_TABLE_ID, TABLE_MENU_ITEM_MENU_ITEM_ID, TABLE_MENU_ITEM_QUANTITY, TABLE_MENU_ITEM_ORDER_DATE, TABLE_MENU_ITEM_TABLE_ID, TABLE_TABLES, TABLE_ID, TABLE_MENU_ITEM_MENU_ITEM_ID, TABLE_MENU_ITEMS, MENU_ITEM_ID);
         db.execSQL(createTableTableMenuItems);
+
+        // Tạo bảng doanh thu
+        String createTableRevenue = String.format("CREATE TABLE %s (%s DATETIME PRIMARY KEY, %s REAL)", TABLE_REVENUE, REVENUE_DATE, REVENUE_AMOUNT);
+        db.execSQL(createTableRevenue);
     }
 
     @Override
@@ -106,7 +115,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAILY_MENU);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAILY_MENU_ITEMS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLE_MENU_ITEMS);
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REVENUE);
         onCreate(db);
     }
 
@@ -321,19 +330,30 @@ public class MyDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<MenuItems> menuItemsList = new ArrayList<>();
 
-        // SQL query to get the daily_menu_id for the given date
+        // Truy vấn để lấy DAILY_MENU_ID cho ngày cụ thể
         String query = "SELECT " + DAILY_MENU_ID + " FROM " + TABLE_DAILY_MENU + " WHERE " + MENU_DATE + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{menuDate});
+        Cursor cursor = null;
+        Cursor itemsCursor = null;
 
-        if (cursor.moveToFirst()) {
-            int dailyMenuId = cursor.getInt(0);
+        try {
+            cursor = db.rawQuery(query, new String[]{menuDate});
 
-            // SQL query to get the menu items for the daily_menu_id
-            String itemsQuery = "SELECT " + MENU_ITEM_ID + ", " + MENU_ITEM_NAME + ", " + MENU_ITEM_DESCRIPTION + ", " + MENU_ITEM_PRICE + ", " + MENU_ITEM_IMAGE + " FROM " + TABLE_MENU_ITEMS + " INNER JOIN " + TABLE_DAILY_MENU_ITEMS + " ON " + TABLE_MENU_ITEMS + "." + MENU_ITEM_ID + " = " + TABLE_DAILY_MENU_ITEMS + "." + MENU_ITEM_ID_FK + " WHERE " + DAILY_MENU_ID_FK + " = ?";
-            Cursor itemsCursor = db.rawQuery(itemsQuery, new String[]{String.valueOf(dailyMenuId)});
+            if (cursor.moveToFirst()) {
+                int dailyMenuId = cursor.getInt(0);
 
-            if (itemsCursor.moveToFirst()) {
-                do {
+                // Truy vấn để lấy danh sách món ăn cho DAILY_MENU_ID
+                String itemsQuery = "SELECT " + TABLE_MENU_ITEMS + "." + MENU_ITEM_ID + ", " +
+                        TABLE_MENU_ITEMS + "." + MENU_ITEM_NAME + ", " +
+                        TABLE_MENU_ITEMS + "." + MENU_ITEM_DESCRIPTION + ", " +
+                        TABLE_MENU_ITEMS + "." + MENU_ITEM_PRICE + ", " +
+                        TABLE_MENU_ITEMS + "." + MENU_ITEM_IMAGE +
+                        " FROM " + TABLE_MENU_ITEMS +
+                        " INNER JOIN " + TABLE_DAILY_MENU_ITEMS +
+                        " ON " + TABLE_MENU_ITEMS + "." + MENU_ITEM_ID + " = " + TABLE_DAILY_MENU_ITEMS + "." + MENU_ITEM_ID_FK +
+                        " WHERE " + TABLE_DAILY_MENU_ITEMS + "." + DAILY_MENU_ID_FK + " = ?";
+                itemsCursor = db.rawQuery(itemsQuery, new String[]{String.valueOf(dailyMenuId)});
+
+                while (itemsCursor.moveToNext()) {
                     int itemId = itemsCursor.getInt(0);
                     String itemName = itemsCursor.getString(1);
                     String itemDescription = itemsCursor.getString(2);
@@ -342,14 +362,19 @@ public class MyDatabase extends SQLiteOpenHelper {
 
                     MenuItems menuItem = new MenuItems(itemId, itemName, itemPrice, itemDescription, itemImage);
                     menuItemsList.add(menuItem);
-                } while (itemsCursor.moveToNext());
+                }
             }
-            itemsCursor.close();
+        } catch (Exception e) {
+            e.printStackTrace(); // Xử lý lỗi nếu có
+        } finally {
+            if (cursor != null) cursor.close();
+            if (itemsCursor != null) itemsCursor.close();
+            db.close(); // Đảm bảo đóng kết nối DB
         }
-        cursor.close();
-        db.close();
+
         return menuItemsList;
     }
+
 
     public void updateDailyMenu(String menuDate, ArrayList<MenuItems> menuItems) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -429,9 +454,10 @@ public class MyDatabase extends SQLiteOpenHelper {
                 int tableNumber = cursor.getInt(1);
                 int capacity = cursor.getInt(2);
                 String status = cursor.getString(3);
+                String tableDate = cursor.getString(4);
 
                 // Tạo đối tượng Tables và thêm vào danh sách
-                Tables table = new Tables(tableId, tableNumber, capacity, status);
+                Tables table = new Tables(tableId, tableNumber, capacity, status, tableDate);
                 tablesList.add(table);
             } while (cursor.moveToNext());
         }
@@ -465,6 +491,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         values.put(TABLE_NUMBER, table.getTableNumber());
         values.put(CAPACITY, table.getCapacity());
         values.put(STATUS, table.getStatus());
+        values.put(TABLE_DATE, table.getTabledate());
 
         // Insert the new record and get the row ID
         long rowId = db.insert(TABLE_TABLES, null, values);
@@ -475,4 +502,132 @@ public class MyDatabase extends SQLiteOpenHelper {
         }
         return result;
     }
+
+    public void deleteTable(int tableId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TABLES, TABLE_ID + "=?", new String[]{String.valueOf(tableId)});
+        db.close();
+    }
+
+    public void updateTable(Tables table) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TABLE_ID, table.getTableId());
+        values.put(TABLE_NUMBER, table.getTableNumber());
+        values.put(CAPACITY, table.getCapacity());
+        values.put(STATUS, table.getStatus());
+        values.put(TABLE_DATE, table.getTabledate());
+        db.update(TABLE_TABLES, values, TABLE_ID + "=?", new String[]{String.valueOf(table.getTableId())});
+        db.close();
+    }
+
+    public void updateMenuItemQuantity(int tableId, int menuItemId, int quantity, String orderDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Kiểm tra xem mục đã tồn tại hay chưa
+        String query = "SELECT * FROM " + TABLE_TABLE_MENU_ITEMS +
+                " WHERE " + TABLE_MENU_ITEM_TABLE_ID + " = ? AND " +
+                TABLE_MENU_ITEM_MENU_ITEM_ID + " = ? AND " +
+                TABLE_MENU_ITEM_ORDER_DATE + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(tableId), String.valueOf(menuItemId), orderDate});
+
+        ContentValues values = new ContentValues();
+        values.put(TABLE_MENU_ITEM_TABLE_ID, tableId);
+        values.put(TABLE_MENU_ITEM_MENU_ITEM_ID, menuItemId);
+        values.put(TABLE_MENU_ITEM_QUANTITY, quantity);
+        values.put(TABLE_MENU_ITEM_ORDER_DATE, orderDate);
+
+        if (cursor.getCount() > 0) {
+            // Nếu mục đã tồn tại, cập nhật số lượng
+            db.update(TABLE_TABLE_MENU_ITEMS, values,
+                    TABLE_MENU_ITEM_TABLE_ID + " = ? AND " +
+                            TABLE_MENU_ITEM_MENU_ITEM_ID + " = ? AND " +
+                            TABLE_MENU_ITEM_ORDER_DATE + " = ?",
+                    new String[]{String.valueOf(tableId), String.valueOf(menuItemId), orderDate});
+        } else {
+            // Nếu mục chưa tồn tại, thêm mới
+            db.insert(TABLE_TABLE_MENU_ITEMS, null, values);
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    public double getRevenueForTableAndDate(int tableId, String date) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalRevenue = 0;
+
+        // Truy vấn để tính tổng doanh thu cho table_id và ngày cụ thể
+        String query = "SELECT SUM(tmi." + TABLE_MENU_ITEM_QUANTITY + " * mi." + MENU_ITEM_PRICE + ") AS total_revenue " +
+                "FROM " + TABLE_TABLE_MENU_ITEMS + " tmi " +
+                "INNER JOIN " + TABLE_MENU_ITEMS + " mi ON tmi." + TABLE_MENU_ITEM_MENU_ITEM_ID + " = mi." + MENU_ITEM_ID + " " +
+                "WHERE tmi." + TABLE_MENU_ITEM_TABLE_ID + " = ? AND tmi." + TABLE_MENU_ITEM_ORDER_DATE + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(tableId), date});
+
+        if (cursor.moveToFirst()) {
+            totalRevenue = cursor.getDouble(0); // Lấy giá trị tổng doanh thu
+        }
+        cursor.close();
+        db.close();
+        return totalRevenue;
+    }
+
+
+    public void addRevenue(String date, double revenue) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Kiểm tra doanh thu đã tồn tại cho ngày cụ thể
+        String checkQuery = "SELECT " + REVENUE_AMOUNT + " FROM " + TABLE_REVENUE + " WHERE " + REVENUE_DATE + " = ?";
+        Cursor cursor = db.rawQuery(checkQuery, new String[]{date});
+
+        if (cursor.moveToFirst()) {
+            // Doanh thu đã tồn tại, cập nhật doanh thu
+            double existingRevenue = cursor.getDouble(0);
+            ContentValues values = new ContentValues();
+            values.put(REVENUE_AMOUNT, existingRevenue + revenue); // Cộng doanh thu mới vào doanh thu hiện tại
+            db.update(TABLE_REVENUE, values, REVENUE_DATE + " = ?", new String[]{date});
+        } else {
+            // Doanh thu chưa tồn tại, chèn doanh thu mới
+            ContentValues values = new ContentValues();
+            values.put(REVENUE_DATE, date);
+            values.put(REVENUE_AMOUNT, revenue);
+            db.insert(TABLE_REVENUE, null, values);
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    public void deleteTableMenuItems(int tableId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TABLE_MENU_ITEMS, TABLE_MENU_ITEM_TABLE_ID + " = ?", new String[]{String.valueOf(tableId)});
+        ContentValues values = new ContentValues();
+        values.put(STATUS, "Trống");
+        db.update(TABLE_TABLES, values, TABLE_ID + " = ?", new String[]{String.valueOf(tableId)});
+        db.close();
+    }
+
+    public double getTotalForDate(String date) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalRevenue = 0;
+
+        // Truy vấn để lấy tổng doanh thu cho ngày cụ thể
+        String query = "SELECT " + REVENUE_AMOUNT + " FROM " + TABLE_REVENUE + " WHERE " + REVENUE_DATE + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{date});
+
+        // Kiểm tra xem con trỏ có di chuyển được đến hàng đầu tiên không
+        if (cursor.moveToFirst()) {
+            // Lấy giá trị tổng doanh thu từ cột đầu tiên
+            totalRevenue = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        db.close();
+        return totalRevenue;
+    }
+
+
+
+
 }

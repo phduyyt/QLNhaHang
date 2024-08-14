@@ -5,17 +5,20 @@ public class Tables {
     private int tableNumber;
     private int capacity;
     private String status;
+    private String tabledate;
 
-    public Tables(int tableId, int tableNumber, int capacity, String status) {
+    public Tables(int tableId, int tableNumber, int capacity, String status, String tabledate) {
         this.tableId = tableId;
         this.tableNumber = tableNumber;
         this.capacity = capacity;
         this.status = status;
+        this.tabledate = tabledate;
     }
-    public Tables( int tableNumber, int capacity, String status) {
+    public Tables( int tableNumber, int capacity, String status, String tabledate) {
         this.tableNumber = tableNumber;
         this.capacity = capacity;
         this.status = status;
+        this.tabledate = tabledate;
     }
 
     // Getters and Setters
@@ -49,5 +52,11 @@ public class Tables {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    public String getTabledate() {
+        return tabledate;
+    }
+    public void setTabledate(String tabledate) {
+        this.tabledate = tabledate;
     }
 }

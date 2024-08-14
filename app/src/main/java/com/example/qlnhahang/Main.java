@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.qlnhahang.DailyMenu.QLDailyMenu;
 import com.example.qlnhahang.Employees.QLNhanVien;
 import com.example.qlnhahang.MenuItems.QLMonAn;
+import com.example.qlnhahang.Revenue.QLRevenue;
 import com.example.qlnhahang.Tables.QLTable;
 
 public class Main extends AppCompatActivity {
@@ -35,5 +36,9 @@ public class Main extends AppCompatActivity {
     public void qlban(View view){
         Intent ban = new Intent(Main.this, QLTable.class);
         startActivity(ban);
+    }
+    public void doanhthu(View view){
+        Intent doanhthu = new Intent(Main.this, QLRevenue.class);
+        startActivity(doanhthu);
     }
 }
