@@ -55,6 +55,7 @@ public class EditTable extends AppCompatActivity {
         dailymenu = findViewById(R.id.dailymenu);
         etMenuDate = findViewById(R.id.etMenuDate);
 
+        int id = Integer.parseInt(getIntent().getStringExtra("id"));
         int number = Integer.parseInt(getIntent().getStringExtra("number"));
         String capacity = getIntent().getStringExtra("capacity");
         String status = getIntent().getStringExtra("status");
@@ -78,7 +79,7 @@ public class EditTable extends AppCompatActivity {
         // Set the selected item
         int statusPosition = tableStatusList.indexOf(status);
         spinnerTableStatus.setSelection(statusPosition);
-        menuItemsList = myDatabase.getMenuItemsForDate(date);
+        menuItemsList = myDatabase.getMenuItemsForDate(id,date);
         menuItemsAdapter = new BanAnMenuAdapter(this, R.layout.layout_table_menu, menuItemsList);
         dailymenu.setAdapter(menuItemsAdapter);
     }

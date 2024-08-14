@@ -326,7 +326,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         return count;
     }
 
-    public ArrayList<MenuItems> getMenuItemsForDate(String menuDate) {
+    public ArrayList<MenuItems> getMenuItemsForDate(int tableid, String menuDate) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<MenuItems> menuItemsList = new ArrayList<>();
 
@@ -359,8 +359,8 @@ public class MyDatabase extends SQLiteOpenHelper {
                     String itemDescription = itemsCursor.getString(2);
                     double itemPrice = itemsCursor.getDouble(3);
                     String itemImage = itemsCursor.getString(4);
-
-                    MenuItems menuItem = new MenuItems(itemId, itemName, itemPrice, itemDescription, itemImage);
+                    int quantity = getQuantityForMenuItem(tableid, itemId);
+                    MenuItems menuItem = new MenuItems(itemId, itemName, itemPrice, itemDescription, itemImage, quantity);
                     menuItemsList.add(menuItem);
                 }
             }
@@ -374,6 +374,30 @@ public class MyDatabase extends SQLiteOpenHelper {
 
         return menuItemsList;
     }
+    public int getQuantityForMenuItem(int tableId, int menuItemId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int quantity = 0;
+        String query = "SELECT " + TABLE_MENU_ITEM_QUANTITY +
+                " FROM " + TABLE_TABLE_MENU_ITEMS +
+                " WHERE " + TABLE_MENU_ITEM_TABLE_ID + " = ?" +
+                " AND " + TABLE_MENU_ITEM_MENU_ITEM_ID + " = ?";
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(tableId), String.valueOf(menuItemId)});
+            if (cursor.moveToFirst()) {
+                quantity = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Xử lý lỗi nếu có
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close(); // Đảm bảo đóng kết nối DB
+        }
+
+        return quantity;
+    }
+
 
 
     public void updateDailyMenu(String menuDate, ArrayList<MenuItems> menuItems) {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.disklrucache.DiskLruCache;
 import com.example.qlnhahang.Class.DailyMenu;
 import com.example.qlnhahang.Class.MenuItems;
 import com.example.qlnhahang.MyDatabase;
@@ -50,7 +51,7 @@ public class BanAnMenuAdapter extends ArrayAdapter<MenuItems> {
         tvMenuItemName.setText(m.getName());
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         tvMenuItemPrice.setText(currencyFormat.format(m.getPrice()));
-        etMenuItemQuantity.setText("0");
+        etMenuItemQuantity.setText(String.valueOf(m.getQuantity()));
         return convertView;
     }
 }
