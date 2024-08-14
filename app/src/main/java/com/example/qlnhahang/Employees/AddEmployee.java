@@ -43,8 +43,7 @@ public class AddEmployee extends AppCompatActivity {
 
     }
     public void quaylai(View view){
-        Intent quaylai = new Intent(AddEmployee.this, QLNhanVien.class);
-        startActivity(quaylai);
+        finish();
     }
     public void themnhanvien(View view){
         try{

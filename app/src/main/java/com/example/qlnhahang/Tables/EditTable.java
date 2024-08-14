@@ -96,8 +96,9 @@ public class EditTable extends AppCompatActivity {
 
                     // Quay lại danh sách bàn ăn
                     Intent intent = new Intent(EditTable.this, QLTable.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    finish(); // Kết thúc Activity hiện tại
+                    finish();
                 })
                 .setNegativeButton("Không", (dialog, which) -> dialog.dismiss()) // Đóng hộp thoại nếu người dùng chọn "Không"
                 .show(); // Hiển thị hộp thoại
@@ -123,7 +124,9 @@ public class EditTable extends AppCompatActivity {
         }
 
         Intent intent1 = new Intent(EditTable.this, QLTable.class);
+        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent1);
+        finish();
     }
     public void hoanthanh(View view) {
         // Lấy ID của bàn ăn từ Intent

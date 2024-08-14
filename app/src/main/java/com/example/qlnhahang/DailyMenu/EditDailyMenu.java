@@ -54,6 +54,8 @@ public class EditDailyMenu extends AppCompatActivity {
         ArrayList<MenuItems> selectedItems = new ArrayList<>(adapter.getSelectedItems());
         myDatabase.updateDailyMenu(date, selectedItems);
         Intent intent = new Intent(EditDailyMenu.this, QLDailyMenu.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
         startActivity(intent);
     }
     public void xoa(View view){
@@ -68,6 +70,8 @@ public class EditDailyMenu extends AppCompatActivity {
 
                     // Chuyển hướng đến QLDailyMenu
                     Intent intent = new Intent(EditDailyMenu.this, QLDailyMenu.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
                     startActivity(intent);
                 })
                 .setNegativeButton("Không", (dialog, which) -> {

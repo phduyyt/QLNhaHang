@@ -52,8 +52,7 @@ public class QLDailyMenu extends AppCompatActivity {
         });
     }
     public void quaylai(View view){
-        Intent ql = new Intent(QLDailyMenu.this, Main.class);
-        startActivity(ql);
+        finish();
     }
     public void themdailymenu(View view){
         Intent themdailymenu = new Intent(QLDailyMenu.this, AddDailyMenu.class);
