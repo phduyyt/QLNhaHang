@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        >
+        android:padding="16dp">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -144,7 +143,7 @@
             android:layout_marginTop="15dp">
 
             <Button
-                android:text="Hoàn thành"
+                android:text="Thanh toán"
                 android:onClick="hoanthanh"
                 android:layout_width="0dp"
                 android:layout_weight="5"
