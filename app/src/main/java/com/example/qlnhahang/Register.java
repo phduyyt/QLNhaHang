@@ -56,5 +56,4 @@ public class Register extends AppCompatActivity {
             Toast.makeText(this, "Tên đăng nhập đã tồn tại với mật khẩu khác!", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
