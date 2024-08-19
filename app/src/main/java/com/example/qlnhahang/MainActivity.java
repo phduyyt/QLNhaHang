@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         txtpass = findViewById(R.id.etPassword);
         myDatabase = new MyDatabase(this);
     }
-
     public void login(View view) {
         String username = txtusername.getText().toString();
         String password = txtpass.getText().toString();
@@ -48,25 +47,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void signin(View view) {
-        txtusername = findViewById(R.id.etUsername);
-        txtpass = findViewById(R.id.etPassword);
-        if (txtusername.getText().toString().isEmpty() || txtpass.getText().toString().isEmpty())
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-        else {
-            String username = txtusername.getText().toString();
-            String password = txtpass.getText().toString();
-            User user = new User(username, password);
-            int result = myDatabase.findUser(user);
 
-            if (result == 0) { // Nếu người dùng không tồn tại
-                myDatabase.addUser(user);
-                Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-            } else if (result == 1) { // Nếu người dùng và mật khẩu khớp (đã đăng ký rồi)
-                Toast.makeText(this, "Tên đăng nhập đã tồn tại!", Toast.LENGTH_SHORT).show();
-            } else { // Nếu người dùng tồn tại nhưng mật khẩu không khớp
-                Toast.makeText(this, "Tên đăng nhập đã tồn tại với mật khẩu khác!", Toast.LENGTH_SHORT).show();
-            }
-        }
+    public void goToRegister(View view) {
+        Intent intent = new Intent(MainActivity.this, Register.class);
+        startActivity(intent);
     }
 }
